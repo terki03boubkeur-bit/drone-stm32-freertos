@@ -75,7 +75,7 @@ osThreadId_t TaskUARTHandle;
 const osThreadAttr_t TaskUART_attributes = {
     .name = "TaskUART",
     .stack_size = 512 * 4,
-    .priority = (osPriority_t) osPriorityHigh,  // ✅ même priorité que les autres
+    .priority = (osPriority_t) osPriorityHigh,  //  même priorité que les autres
 };
 
 osMessageQueueId_t QueueMPUHandle;
@@ -132,8 +132,8 @@ void Taskmotour(void *argument);
 void Taskuart(void *argument);
 
 /* USER CODE BEGIN PFP */
-void affiche_boot(char *msg);   // ✅ sans mutex — pour main() avant kernel
-void affiche(char *msg);        // ✅ avec mutex — pour les tâches FreeRTOS
+void affiche_boot(char *msg);   //  sans mutex — pour main() avant kernel
+void affiche(char *msg);        // avec mutex — pour les tâches FreeRTOS
 void lire_cap(void);
 void init_cap(void);
 void calibration(void);
@@ -157,7 +157,7 @@ int main(void)
     MX_TIM2_Init();
 
     /* USER CODE BEGIN 2 */
-    // ✅ Utilise affiche_boot (pas de mutex) avant osKernelStart
+    // Utilise affiche_boot (pas de mutex) avant osKernelStart
     affiche_boot(" <== demarrage ==>\r\n");
     lire_cap();
 
@@ -661,12 +661,12 @@ void Taskuart(void *argument)
             float ya = g_yaw;
             osMutexRelease(MutexconsigneHandle);
 
-            // ✅ Feedback visuel confirme que la touche a ete recue
+            //  Feedback visuel confirme que la touche a ete recue
             sprintf(buf, ">> THR:%.1f PIT:%.1f YAW:%.1f\r\n", t, pi, ya);
             affiche(buf);
         }
 
-        osDelay(5); // ✅ libere le CPU entre chaque poll
+        osDelay(5); //  libere le CPU entre chaque poll
     }
 }
 
@@ -726,7 +726,7 @@ static void MX_TIM2_Init(void)
 
     // Fclk TIM2 = APB1 * 2 = 45MHz * 2 = 90MHz
     // Prescaler 89 -> Ftick = 90MHz / 90 = 1MHz -> periode 1us
-    // Period 19999 -> periode PWM = 20000us = 20ms = 50Hz  ✅ ESC standard
+    // Period 19999 -> periode PWM = 20000us = 20ms = 50Hz   ESC standard
     htim2.Instance               = TIM2;
     htim2.Init.Prescaler         = 179;
     htim2.Init.CounterMode       = TIM_COUNTERMODE_UP;
