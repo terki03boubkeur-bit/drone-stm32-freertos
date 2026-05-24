@@ -619,7 +619,7 @@ void Taskuart(void *argument)
 
     for (;;)
     {
-        // ✅ HAL_UART_Receive avec timeout court — non bloquant pour FreeRTOS
+        //  HAL_UART_Receive avec timeout court — non bloquant pour FreeRTOS
         if (HAL_UART_Receive(&huart2, &c, 1, 10) == HAL_OK)
         {
             osMutexAcquire(MutexconsigneHandle, osWaitForever);
