@@ -597,7 +597,7 @@ void Taskmotour(void *argument)
             __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, m3);
             __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, m4);
 
-            // ✅ Ce sprintf est maintenant DANS la boucle
+            //  Ce sprintf est maintenant DANS la boucle
             sprintf(buf, "M1:%lu M2:%lu M3:%lu M4:%lu\r\n", m1, m2, m3, m4);
             affiche(buf);
         }
