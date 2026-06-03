@@ -2,7 +2,6 @@
 /**
   ******************************************************************************
   * @file           : main.c
-  * @brief          : Main program body - Drone STM32 F446RE + MPU6050 + FreeRTOS
   ******************************************************************************
   */
 /* USER CODE END Header */
@@ -221,7 +220,7 @@ int main(void)
  * ========================================================================== */
 
 /**
- * @brief Affichage SANS mutex — à utiliser AVANT osKernelStart (dans main)
+ *  Affichage SANS mutex — à utiliser AVANT osKernelStart (dans main)
  */
 void affiche_boot(char *msg)
 {
@@ -229,7 +228,7 @@ void affiche_boot(char *msg)
 }
 
 /**
- * @brief Affichage AVEC mutex — à utiliser dans les tâches FreeRTOS
+ *  Affichage AVEC mutex — à utiliser dans les tâches FreeRTOS
  */
 void affiche(char *msg)
 {
@@ -239,7 +238,7 @@ void affiche(char *msg)
 }
 
 /**
- * @brief Scan I2C — appelé au boot, utilise affiche_boot
+ * Scan I2C — appelé au boot, utilise affiche_boot
  */
 void lire_cap(void)
 {
@@ -260,7 +259,7 @@ void lire_cap(void)
 }
 
 /**
- * @brief Init MPU6050 — appelée dans TaskMPU (après kernel)
+ *  Init MPU6050 — appelée dans TaskMPU (après kernel)
  */
 void init_cap(void)
 {
@@ -274,7 +273,7 @@ void init_cap(void)
 }
 
 /**
- * @brief Calibration gyro + offset angles
+ *  Calibration gyro + offset angles
  */
 void calibration(void)
 {
@@ -331,7 +330,7 @@ void calibration(void)
 }
 
 /**
- * @brief Lit le MPU6050, calcule dt réel, appelle Madgwick, retourne angles corrigés
+ *  Lit le MPU6050, calcule dt réel, appelle Madgwick, retourne angles corrigés
  */
 void recup_val(mpu *cap)
 {
@@ -393,7 +392,7 @@ void recup_val(mpu *cap)
 }
 
 /**
- * @brief Calcul PID
+ *  Calcul PID
  */
 float pid_calcul(pid *p, float consigne, float mesure)
 {
@@ -415,7 +414,7 @@ float pid_calcul(pid *p, float consigne, float mesure)
 }
 
 /**
- * @brief Convertit throttle 0-100% en valeur CCR (500-1000 pour ESC standard)
+ *  Convertit throttle 0-100% en valeur CCR (500-1000 pour ESC standard)
  */
 uint32_t throttle_to_pwm(float throttle)
 {
@@ -425,7 +424,7 @@ uint32_t throttle_to_pwm(float throttle)
 }
 
 /**
- * @brief Madgwick AHRS update
+ *  Madgwick AHRS update
  */
 void Madgwick_Update(float gx, float gy, float gz,
                      float ax, float ay, float az)
@@ -483,7 +482,7 @@ void Madgwick_Update(float gx, float gy, float gz,
 }
 
 /**
- * @brief Convertit quaternion en angles Euler (degres)
+ *  Convertit quaternion en angles Euler (degres)
  */
 void Madgwick_GetAngles(float *roll, float *pitch, float *yaw)
 {
@@ -492,12 +491,12 @@ void Madgwick_GetAngles(float *roll, float *pitch, float *yaw)
     *yaw   = atan2f(2*(q0*q3 + q1*q2), 1 - 2*(q2*q2 + q3*q3)) * 57.2958f;
 }
 
-/* ==========================================================================
+/* 
  * TÂCHES FreeRTOS
- * ========================================================================== */
+ *  */
 
 /**
- * @brief TaskMPU — init, calibration, lecture MPU6050 @ 100ms
+ *  TaskMPU — init, calibration, lecture MPU6050 @ 100ms
  */
 void Taskmpu(void *argument)
 {
@@ -526,7 +525,7 @@ void Taskmpu(void *argument)
 }
 
 /**
- * @brief TaskPID — lit angles, calcule PID, envoie vers moteurs
+ *  TaskPID — lit angles, calcule PID, envoie vers moteurs
  */
 void Taskpid(void *argument)
 {
@@ -562,7 +561,7 @@ void Taskpid(void *argument)
 }
 
 /**
- * @brief TaskMoteur — applique les PWM sur les 4 moteurs
+ *  TaskMoteur — applique les PWM sur les 4 moteurs
  *
  *  Disposition quadcopter + (vue dessus) :
  *        M1 (avant-gauche)   M2 (avant-droit)
@@ -605,7 +604,7 @@ void Taskmotour(void *argument)
 }
 
 /**
- * @brief TaskUART — reception commandes clavier depuis Putty
+ *  TaskUART — reception commandes clavier depuis Putty
  *
  *  z/Z : throttle +2%     s/S : throttle -2%
  *  a/A : pitch +1°        e/E : pitch -1°
@@ -661,7 +660,7 @@ void Taskuart(void *argument)
             float ya = g_yaw;
             osMutexRelease(MutexconsigneHandle);
 
-            //  Feedback visuel confirme que la touche a ete recue
+            //   confirme que la touche a ete recue
             sprintf(buf, ">> THR:%.1f PIT:%.1f YAW:%.1f\r\n", t, pi, ya);
             affiche(buf);
         }
